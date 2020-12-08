@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/hrishin/sifar/pkg/hello"
 )
 
@@ -12,7 +13,9 @@ func main() {
 	// change the port in Dockerfile as well
 	port := 5000
 
-	r := hello.MountRoutes()
+	r := mux.NewRouter()
+	hello.MountRoutes(r)
+
 	srv := &http.Server{
 		Addr:    fmt.Sprintf("0.0.0.0:%d", port),
 		Handler: r,
