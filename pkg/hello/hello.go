@@ -7,10 +7,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func MountRoutes() *mux.Router {
-	r := mux.NewRouter()
-	r.HandleFunc("/hello", HelloWorldHandler)
-	return r
+func MountRoutes(router *mux.Router) {
+	router.HandleFunc("/hello", HelloWorldHandler)
 }
 
 func HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
