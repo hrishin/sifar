@@ -1,4 +1,5 @@
 # Sifar
-Simple quickstart for writing an application in go. Sifar means zero in Urdu.
+Simple quickstart for writing web services in the [golang](https://golang.org/). 
+Sifar means zero in Urdu.
 
 
