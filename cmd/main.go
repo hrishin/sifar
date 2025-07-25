@@ -11,7 +11,7 @@ import (
 
 func main() {
 	// change the port in Dockerfile as well
-	port := 5000
+	port := 8000
 
 	r := mux.NewRouter()
 	hello.MountRoutes(r)

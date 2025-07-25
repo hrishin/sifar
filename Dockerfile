@@ -1,24 +1,21 @@
 # builder
-FROM golang:alpine AS build-env
+FROM --platform=$BUILDPLATFORM golang:alpine AS build-env
 
-ENV GO111MODULE=on \ 
+ARG TARGETOS
+ARG TARGETARCH
+
+ENV GO111MODULE=on \
     CGO_ENABLED=0 \
-    GOOS=linux \
-    GOARCH=amd64
+    GOOS=$TARGETOS \
+    GOARCH=$TARGETARCH
 
 WORKDIR /build
-
 COPY . .
+RUN go build -o sifar ./cmd/main.go
 
-RUN go build -o pokemon ./cmd/main.go
-
-# final stage
-FROM alpine
-
+FROM scratch
 WORKDIR /app
-
 COPY --from=build-env /build/sifar /app/
+EXPOSE 8000
 
-EXPOSE 5000
-
-ENTRYPOINT ./sifar
+ENTRYPOINT ["./sifar"]
