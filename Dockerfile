@@ -1,5 +1,4 @@
-# builder
-FROM --platform=$BUILDPLATFORM golang:alpine AS build-env
+FROM --platform=$BUILDPLATFORM golang:1.23-alpine AS builder
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -10,12 +9,17 @@ ENV GO111MODULE=on \
     GOARCH=$TARGETARCH
 
 WORKDIR /build
-COPY . .
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+ADD cmd/ ./cmd/
+ADD pkg/ ./pkg/
+
 RUN go build -o sifar ./cmd/main.go
 
 FROM scratch
-WORKDIR /app
-COPY --from=build-env /build/sifar /app/
+COPY --from=builder /build/sifar /bin/sifar
 EXPOSE 8000
 
-ENTRYPOINT ["./sifar"]
+ENTRYPOINT ["/bin/sifar"]
